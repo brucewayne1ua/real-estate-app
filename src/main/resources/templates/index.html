@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Квартиры на продажу</title>
+  </head>
+  <body>
+    <h1>Объявления</h1>
+
+    <p><a href="/listings/new">+ Добавить объявление</a></p>
+
+    <ul>
+      <li th:each="listing : ${listings}">
+        <strong th:text="${listing.title}">Название</strong><br />
+        Город: <span th:text="${listing.city}"></span><br />
+        Цена: <span th:text="${listing.price} + ' $'"></span><br />
+        <hr />
+      </li>
+    </ul>
+  </body>
+</html>
