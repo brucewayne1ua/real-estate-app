@@ -8,6 +8,50 @@
 
     <p><a href="/listings/new">+ Добавить объявление</a></p>
 
+    <!-- Форма поиска и фильтрации -->
+    <form th:action="@{/search}" method="get">
+      <input
+        type="text"
+        name="query"
+        placeholder="Поиск по названию или описанию"
+        th:value="${query}"
+      />
+
+      <!-- Кнопка для отображения фильтров -->
+      <button type="button" onclick="toggleFilters()">Фильтры</button>
+
+      <!-- Блок фильтров (изначально скрыт) -->
+      <div id="filters" style="display: none; margin-top: 10px">
+        <label
+          ><input type="checkbox" name="keywords" value="балкон" />
+          Балкон</label
+        ><br />
+        <label
+          ><input type="checkbox" name="keywords" value="ремонт" />
+          Ремонт</label
+        ><br />
+        <label
+          ><input type="checkbox" name="keywords" value="парковка" />
+          Парковка</label
+        ><br />
+        <label
+          ><input type="checkbox" name="keywords" value="лифт" /> Лифт</label
+        ><br />
+        <!-- Добавь свои ключевые слова по необходимости -->
+      </div>
+
+      <br />
+      <button type="submit">Искать</button>
+    </form>
+
+    <script>
+      function toggleFilters() {
+        const filters = document.getElementById('filters');
+        filters.style.display =
+          filters.style.display === 'none' ? 'block' : 'none';
+      }
+    </script>
+
     <ul>
       <li th:each="listing : ${listings}">
         <strong th:text="${listing.title}">Название</strong><br />

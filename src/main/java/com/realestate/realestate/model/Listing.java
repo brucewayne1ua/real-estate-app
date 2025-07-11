@@ -1,6 +1,12 @@
 package com.realestate.realestate.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "listings")
@@ -13,6 +19,7 @@ public class Listing {
     private String description;
     private Double price;
     private String city;
+    private String squareMeters;
 
     @ManyToOne
     @JoinColumn(name = "owner_id")
@@ -37,4 +44,7 @@ public class Listing {
 
     public User getOwner() { return owner; }
     public void setOwner(User owner) { this.owner = owner; }
-}
+
+    public String getSquareMeters() { return squareMeters; }
+    public void setSquareMeters(String squareMeters) { this.squareMeters = squareMeters; }
+    }

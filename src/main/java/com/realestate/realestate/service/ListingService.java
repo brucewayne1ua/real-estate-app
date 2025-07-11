@@ -3,10 +3,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.realestate.dto.ListingSearchCriteria;
 import com.realestate.realestate.model.Listing;
 import com.realestate.realestate.repository.ListingRepository;
+import com.realestate.specifications.ListingSpecification;
 
 @Service
 public class ListingService {
@@ -18,7 +21,6 @@ public class ListingService {
         this.listingRepository = listingRepository;
     }
 
-    // Просто возвращаем список Listing, без кастинга
     public List<Listing> getAll() {
         return listingRepository.findAll();
     }
@@ -31,4 +33,12 @@ public class ListingService {
     public Optional<Listing> findById(Long id) {
         return listingRepository.findById(id);
     }
+   
+
+    public List<Listing> search(ListingSearchCriteria criteria) {
+        Specification<Listing> spec = ListingSpecification.withFilters(criteria);
+        return listingRepository.findAll(spec);
+    }
 }
+
+

@@ -1,5 +1,6 @@
 package com.realestate.realestate.controller;
 
+import com.realestate.dto.ListingSearchCriteria;
 import com.realestate.realestate.model.Listing;
 import com.realestate.realestate.model.User;
 import com.realestate.realestate.repository.UserRepository;
@@ -11,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;              
 import java.util.Optional;
 
 @Controller
@@ -59,5 +61,13 @@ public class ListingController {
         } else {
             return "redirect:/";
         }
+    }
+
+    @GetMapping("/search")
+    public String searchListing(@ModelAttribute ListingSearchCriteria criteria, Model model) {
+        List<Listing> listings = listingService.search(criteria);
+        model.addAttribute("listings", listings);
+        model.addAttribute("criteria", criteria);
+        return "search_results";
     }
 }

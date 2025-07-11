@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Объявление</title>
+  </head>
+  <body>
+    <h1 th:text="${listing.title}">Заголовок</h1>
+    <p><strong>Город:</strong> <span th:text="${listing.city}"></span></p>
+    <p><strong>Цена:</strong> <span th:text="${listing.price}"></span> USD</p>
+    <p>
+      <strong>Описание:</strong> <span th:text="${listing.description}"></span>
+    </p>
+    <p>
+      <strong>Добавил:</strong> <span th:text="${listing.owner.email}"></span>
+    </p>
+    <p><strong>КВ.М</strong> <span th:text="${listing.squareMeters}"></span></p>
+    <a href="/">← Назад к объявлениям</a>
+  </body>
+</html>
