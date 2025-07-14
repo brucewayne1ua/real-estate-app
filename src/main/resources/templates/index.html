@@ -100,7 +100,7 @@
       </form>
 
       <!-- Список объявлений -->
-      <div th:each="listing : ${listings}" class="card mb-3">
+      <div th:each="listing : ${listings}" class="card mb-3 position-relative">
         <div class="card-body">
           <h5 class="card-title" th:text="${listing.title}">Название</h5>
           <p class="card-text">
@@ -109,6 +109,11 @@
           <p class="card-text">
             Цена: <span th:text="${listing.price} + ' $'">Цена</span>
           </p>
+          <!-- Кликабельная ссылка на всю карточку -->
+          <a
+            th:href="@{'/listings/' + ${listing.id}}"
+            class="stretched-link"
+          ></a>
         </div>
       </div>
     </div>

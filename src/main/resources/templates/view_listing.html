@@ -18,7 +18,8 @@
 
         <ul class="list-group list-group-flush mb-3">
           <li class="list-group-item">
-            <strong>Город:</strong> <span th:text="${listing.city}">Город</span>
+            <strong>Город:</strong>
+            <span th:text="${listing.city}">Город</span>
           </li>
           <li class="list-group-item">
             <strong>Цена:</strong>
@@ -34,7 +35,13 @@
           </li>
           <li class="list-group-item">
             <strong>Добавил:</strong>
-            <span th:text="${listing.owner.email}">Email</span>
+            <a
+              th:href="@{'/user_profile/' + ${listing.owner.id}}"
+              th:text="${listing.owner.email}"
+              class="text-decoration-none"
+            >
+              Email
+            </a>
           </li>
         </ul>
 
