@@ -16,7 +16,8 @@
       <div class="card shadow p-4">
         <h2 class="mb-4">Добавить новое объявление</h2>
 
-        <form th:action="@{/listings}" th:object="${listing}" method="post">
+        <!-- enctype обязательно для загрузки файлов -->
+        <form th:action="@{/listings}" th:object="${listing}" method="post" enctype="multipart/form-data">
           <div class="mb-3">
             <label for="title" class="form-label">Заголовок</label>
             <input
@@ -24,6 +25,7 @@
               th:field="*{title}"
               class="form-control"
               id="title"
+              required
             />
           </div>
 
@@ -44,6 +46,7 @@
               th:field="*{city}"
               class="form-control"
               id="city"
+              required
             />
           </div>
 
@@ -55,18 +58,30 @@
               th:field="*{price}"
               class="form-control"
               id="price"
+              required
             />
           </div>
 
           <div class="mb-3">
-            <label for="squareMeters" class="form-label"
-              >Квадратные метры</label
-            >
+            <label for="squareMeters" class="form-label">Квадратные метры</label>
             <input
               type="text"
               th:field="*{squareMeters}"
               class="form-control"
               id="squareMeters"
+            />
+          </div>
+
+          <!-- Новое поле для загрузки фотографий -->
+          <div class="mb-3">
+            <label for="images" class="form-label">Фотографии (можно выбрать несколько)</label>
+            <input
+              type="file"
+              id="images"
+              name="images"
+              class="form-control"
+              accept="image/*"
+              multiple
             />
           </div>
 

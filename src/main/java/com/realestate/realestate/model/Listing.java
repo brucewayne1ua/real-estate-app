@@ -1,12 +1,8 @@
 package com.realestate.realestate.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "listings")
@@ -21,12 +17,16 @@ public class Listing {
     private String city;
     private String squareMeters;
 
+    @ElementCollection
+    @CollectionTable(name = "listing_images", joinColumns = @JoinColumn(name = "listing_id"))
+    @Column(name = "image_path")
+    private List<String> imagePaths = new ArrayList<>();
+
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private User owner;
 
-    // геттеры и сеттеры
-
+    // Геттеры и сеттеры
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -42,9 +42,12 @@ public class Listing {
     public String getCity() { return city; }
     public void setCity(String city) { this.city = city; }
 
-    public User getOwner() { return owner; }
-    public void setOwner(User owner) { this.owner = owner; }
-
     public String getSquareMeters() { return squareMeters; }
     public void setSquareMeters(String squareMeters) { this.squareMeters = squareMeters; }
-    }
+
+    public List<String> getImagePaths() { return imagePaths; }
+    public void setImagePaths(List<String> imagePaths) { this.imagePaths = imagePaths; }
+
+    public User getOwner() { return owner; }
+    public void setOwner(User owner) { this.owner = owner; }
+}

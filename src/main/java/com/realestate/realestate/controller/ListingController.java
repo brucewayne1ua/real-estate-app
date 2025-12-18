@@ -1,16 +1,17 @@
 package com.realestate.realestate.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.realestate.dto.ListingSearchCriteria;
 import com.realestate.realestate.model.Listing;
@@ -43,16 +44,46 @@ public class ListingController {
     }
 
     @PostMapping("/listings")
-    public String saveListing(@ModelAttribute Listing listing, Principal principal) {
-        User user = (User) userRepository.findByEmail(principal.getName());
-        Optional<User> optionalUser = Optional.ofNullable(user);
-        if (optionalUser.isPresent()) {
-            listing.setOwner(optionalUser.get());
+    @Transactional
+    public String saveListing(@ModelAttribute Listing listing,
+                              @RequestParam(value = "images", required = false) MultipartFile[] images,
+                              Principal principal) {
+
+        if (principal == null) return "redirect:/login";
+
+        User user = userRepository.findByEmail(principal.getName());
+        if (user == null) return "redirect:/login";
+
+        listing.setOwner(user);
+
+        // Сохраняем Listing сначала, чтобы Hibernate "подхватил" @ElementCollection
+        listingService.save(listing);
+
+        // Папка для изображений
+        String uploadDir = "uploads/";
+        File uploadFolder = new File(uploadDir);
+        if (!uploadFolder.exists()) uploadFolder.mkdirs();
+
+        if (images != null) {
+            for (MultipartFile image : images) {
+                if (image != null && !image.isEmpty()) {
+                    try {
+                        String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
+                        File destFile = new File(uploadDir + fileName);
+                        image.transferTo(destFile);
+
+                        // Добавляем путь к изображению и обновляем Listing
+                        listing.getImagePaths().add("/uploads/" + fileName);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            // Сохраняем обновленный список изображений
             listingService.save(listing);
-            return "redirect:/";
-        } else {
-            return "redirect:/login";
         }
+
+        return "redirect:/";
     }
 
     @GetMapping("/listings/{id}")
@@ -73,5 +104,4 @@ public class ListingController {
         model.addAttribute("criteria", criteria);
         return "search_results";
     }
-
 }

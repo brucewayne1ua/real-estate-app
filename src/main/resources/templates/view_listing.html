@@ -1,52 +1,85 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <title>Объявление</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-      defer
-    ></script>
-  </head>
-  <body class="bg-light">
-    <div class="container mt-5">
-      <div class="card shadow p-4">
+<head>
+    <title th:text="${listing.title}">Объявление</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            defer></script>
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-5">
+    <div class="card shadow p-4">
+
+        <!-- Заголовок -->
         <h1 class="card-title mb-4" th:text="${listing.title}">Заголовок</h1>
 
+        <!-- ===== ФОТО ===== -->
+        <div th:if="${listing.imagePaths != null and !listing.imagePaths.isEmpty()}"
+             id="listingCarousel"
+             class="carousel slide mb-4"
+             data-bs-ride="carousel">
+
+            <div class="carousel-inner">
+                <div th:each="img, iter : ${listing.imagePaths}"
+                     class="carousel-item"
+                     th:classappend="${iter.index == 0} ? ' active'">
+                    <img th:src="${img}"
+                         class="d-block w-100 rounded"
+                         style="max-height: 420px; object-fit: cover"
+                         alt="Фото объявления">
+                </div>
+            </div>
+
+            <button class="carousel-control-prev" type="button"
+                    data-bs-target="#listingCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+
+            <button class="carousel-control-next" type="button"
+                    data-bs-target="#listingCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div>
+
+        <!-- ===== ДАННЫЕ ===== -->
         <ul class="list-group list-group-flush mb-3">
-          <li class="list-group-item">
-            <strong>Город:</strong>
-            <span th:text="${listing.city}">Город</span>
-          </li>
-          <li class="list-group-item">
-            <strong>Цена:</strong>
-            <span th:text="${listing.price}">Цена</span> USD
-          </li>
-          <li class="list-group-item">
-            <strong>Площадь:</strong>
-            <span th:text="${listing.squareMeters}">Кв.м</span> м²
-          </li>
-          <li class="list-group-item">
-            <strong>Описание:</strong><br />
-            <span th:text="${listing.description}">Описание</span>
-          </li>
-          <li class="list-group-item">
-            <strong>Добавил:</strong>
-            <a
-              th:href="@{'/user_profile/' + ${listing.owner.id}}"
-              th:text="${listing.owner.email}"
-              class="text-decoration-none"
-            >
-              Email
-            </a>
-          </li>
+            <li class="list-group-item">
+                <strong>Город:</strong>
+                <span th:text="${listing.city}">Город</span>
+            </li>
+
+            <li class="list-group-item">
+                <strong>Цена:</strong>
+                <span th:text="${listing.price}">Цена</span> USD
+            </li>
+
+            <li class="list-group-item">
+                <strong>Площадь:</strong>
+                <span th:text="${listing.squareMeters}">Кв.м</span> м²
+            </li>
+
+            <li class="list-group-item">
+                <strong>Описание:</strong><br>
+                <span th:text="${listing.description}">Описание</span>
+            </li>
+
+            <li class="list-group-item">
+                <strong>Добавил:</strong>
+                <a th:href="@{'/user_profile/' + ${listing.owner.id}}"
+                   th:text="${listing.owner.email}"
+                   class="text-decoration-none">
+                    Email
+                </a>
+            </li>
         </ul>
 
-        <a href="/" class="btn btn-outline-secondary">← Назад к объявлениям</a>
-      </div>
+        <a href="/" class="btn btn-outline-secondary">← Назад</a>
     </div>
-  </body>
+</div>
+
+</body>
 </html>

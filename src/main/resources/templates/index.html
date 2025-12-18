@@ -19,111 +19,36 @@
       </div>
 
       <div class="mb-3">
-        <a href="/listings/new" class="btn btn-success"
-          >+ Добавить объявление</a
-        >
+        <a href="/listings/new" class="btn btn-success">+ Добавить объявление</a>
       </div>
 
-      <!-- Форма поиска и фильтрации -->
-      <form th:action="@{/search}" method="get" class="mb-4">
-        <div class="row g-2">
-          <div class="col-md-6">
-            <input
-              type="text"
-              class="form-control"
-              name="query"
-              placeholder="Поиск по названию или описанию"
-              th:value="${query}"
-            />
-          </div>
-          <div class="col-auto">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              onclick="toggleFilters()"
-            >
-              Фильтры
-            </button>
-          </div>
-          <div class="col-auto">
-            <button type="submit" class="btn btn-primary">Искать</button>
-          </div>
-        </div>
-
-        <!-- Блок фильтров -->
-        <div
-          id="filters"
-          class="mt-3 p-3 border rounded bg-white"
-          style="display: none"
-        >
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              name="keywords"
-              value="балкон"
-              id="filterBalcony"
-            />
-            <label class="form-check-label" for="filterBalcony">Балкон</label>
-          </div>
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              name="keywords"
-              value="ремонт"
-              id="filterRepair"
-            />
-            <label class="form-check-label" for="filterRepair">Ремонт</label>
-          </div>
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              name="keywords"
-              value="парковка"
-              id="filterParking"
-            />
-            <label class="form-check-label" for="filterParking">Парковка</label>
-          </div>
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              name="keywords"
-              value="лифт"
-              id="filterElevator"
-            />
-            <label class="form-check-label" for="filterElevator">Лифт</label>
-          </div>
-        </div>
-      </form>
-
       <!-- Список объявлений -->
-      <div th:each="listing : ${listings}" class="card mb-3 position-relative">
-        <div class="card-body">
-          <h5 class="card-title" th:text="${listing.title}">Название</h5>
-          <p class="card-text">
-            Город: <span th:text="${listing.city}">Город</span>
-          </p>
-          <p class="card-text">
-            Цена: <span th:text="${listing.price} + ' $'">Цена</span>
-          </p>
-          <!-- Кликабельная ссылка на всю карточку -->
-          <a
-            th:href="@{'/listings/' + ${listing.id}}"
-            class="stretched-link"
-          ></a>
+      <div th:each="listing : ${listings}" class="card mb-3">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <!-- Если есть фото, показываем первое -->
+            <div th:if="${#lists.isEmpty(listing.imagePaths) == false}">
+              <img th:src="${listing.imagePaths.get(0)}" class="img-fluid rounded-start" alt="Фото квартиры"/>
+            </div>
+            <!-- Если фото нет -->
+            <div th:if="${#lists.isEmpty(listing.imagePaths)}" class="d-flex align-items-center justify-content-center bg-secondary text-white" style="height: 200px;">
+              Нет фото
+            </div>
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title" th:text="${listing.title}">Название</h5>
+              <p class="card-text">
+                Город: <span th:text="${listing.city}">Город</span>
+              </p>
+              <p class="card-text">
+                Цена: <span th:text="${listing.price} + ' $'">Цена</span>
+              </p>
+              <a th:href="@{'/listings/' + ${listing.id}}" class="stretched-link"></a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-
-    <script>
-      function toggleFilters() {
-        const filters = document.getElementById('filters');
-        filters.style.display =
-          filters.style.display === 'none' ? 'block' : 'none';
-      }
-    </script>
   </body>
 </html>
