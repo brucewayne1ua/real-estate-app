@@ -39,6 +39,10 @@ public class ListingService {
         Specification<Listing> spec = ListingSpecification.withFilters(criteria);
         return listingRepository.findAll(spec);
     }
+
+    public void delete(Listing listing) {
+        listingRepository.delete(listing);
+    }
 }
 
 
